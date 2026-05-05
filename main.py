@@ -1,15 +1,15 @@
 import asyncio
+import sys
 from aiogram import Bot, Dispatcher, F
 from aiogram.filters import CommandStart
 from aiogram.types import Message, InlineKeyboardButton, InlineKeyboardMarkup, CallbackQuery
 
+# ⚠️ Твой токен
 TOKEN = "7970297730:AAGELamWJDkxSxZ80GtbyWUndWin541g4Fg"
 
-# ✅ Простая инициализация — без прокси!
 bot = Bot(token=TOKEN)
 dp = Dispatcher()
 
-# --- ЛОГИКА ИГРЫ ---
 @dp.message(CommandStart())
 async def cmd_start(message: Message):
     keyboard = InlineKeyboardMarkup(inline_keyboard=[
@@ -55,11 +55,13 @@ async def process_restart(callback: CallbackQuery):
         reply_markup=keyboard
     )
 
-# --- ЗАПУСК ---
 async def main():
-    print("✅ Бот запущен! Жду команды /start в Телеграм...")
+    print("✅ Бот запущен на сервере!", flush=True)
     await dp.start_polling(bot)
 
 if __name__ == "__main__":
-    asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
+    # 🔧 Исправление: настройка только для Windows
+    if sys.platform == "win32":
+        asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
+    
     asyncio.run(main())
